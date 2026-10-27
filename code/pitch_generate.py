@@ -134,6 +134,13 @@ def reviews(proof_text, limit):
         m = re.match(r'^"(.+)"\s*·\s*(.+)$', line)
         if m:
             out.append({'quote': m.group(1), 'job': m.group(2), 'stars': five})
+    # /about-me writes one "### Who" block per review: the quote on its own line, then "Job: ...".
+    for who, body in re.findall(r'^### ([^\n]+)\n(.*?)(?=^### |\Z)', block, re.M | re.S):
+        quote = next((l.strip() for l in body.splitlines() if l.strip().startswith('"')), '')
+        job = next((l.strip()[4:].strip() for l in body.splitlines() if l.strip().startswith('Job:')), '')
+        if quote.endswith('"') and len(quote) > 2:
+            label = who.strip() + (f' · {re.split(r"[.,;]", job)[0]}' if job else '')
+            out.append({'quote': quote[1:-1].replace('\u2014', '-'), 'job': label, 'stars': 'rating 5.0' in body.lower()})
     return out[:limit] if limit else out
 
 
