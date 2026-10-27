@@ -145,7 +145,8 @@ def pc_contacts(text):
     problems = []
     if pitch_check.EMAIL.search(body):
         problems.append('an email address is in the letter: Upwork bans contact details before a contract')
-    if pitch_check.phone_hit(body):
+    # A link's digits (a pitch page path is the job id) are not a phone number.
+    if pitch_check.phone_hit(re.sub(r'https?://\S+', ' ', body)):
         problems.append('a phone number is in the letter: Upwork bans contact details before a contract')
     hit = pitch_check.CONTACT_LINKS.search(body)
     if hit:
