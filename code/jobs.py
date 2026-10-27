@@ -521,9 +521,16 @@ def disqualified(job, limits):
     if str(job.get('engagement') or '').upper() == 'FULL_TIME' and not limits['full_time']:
         return 'full-time role, not a project'
     proposals = job.get('proposals')
-    if (limits['proposals'] and isinstance(proposals, (int, float))
-            and proposals > limits['proposals']):
+    if limits['proposals'] and isinstance(proposals, (int, float)) and proposals > limits['proposals']:
         return f'{int(proposals)} proposals, over your cap of {limits["proposals"]:g}'
+    # Search rows carry a tier ("20 to 50", "50+", "Fewer than 5"), not a count.
+    # A tier is over the cap when even its low end reaches the cap and it runs past it.
+    if limits['proposals'] and isinstance(proposals, str):
+        bounds = numbers(proposals)
+        low = 0 if 'fewer' in proposals.lower() else (bounds[0] if bounds else None)
+        high = float('inf') if '+' in proposals else (bounds[-1] if bounds else None)
+        if low is not None and low >= limits['proposals'] and high > limits['proposals']:
+            return f'{proposals} proposals, over your cap of {limits["proposals"]:g}'
     rating, reviews = c.get('rating'), c.get('total_reviews')
     if limits['min_rating'] and rating is not None and rating < limits['min_rating'] and (reviews or 0) >= 3:
         return f'client rated {rating} by freelancers'
