@@ -204,7 +204,7 @@ def check(text, job_title='', proof_text='', ready=False, fast=False, modality='
     for mark in markdown_marks(text):
         fails.append(f'markdown in the text ({mark}): Upwork shows it as typed, so write plain lines')
     # Contact details violate the pre-contract rule, so the application gate
-    # refuses them just as the pitch-page gate does.
+    # refuses them just as the page gate does.
     for problem in pc_contacts(text):
         fails.append(problem)
     if modality not in ('text', 'uma'):

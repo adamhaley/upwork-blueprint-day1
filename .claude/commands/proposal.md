@@ -1,5 +1,5 @@
 ---
-description: Builds a one-page pitch site for one job and the application to submit with your Loom: cover letter and bid.
+description: Writes the application for one job, to submit with your Loom: cover letter, screening answers, bid and the video script.
 argument-hint: "<job id or Upwork job link> [fast] | <job id> [more job ids] | <job id> submitted | video"
 ---
 
@@ -12,43 +12,27 @@ Before starting, read and follow [analytics capture: proposal](../../references/
 **`/proposal <id> submitted`:** only run `python3 code/pipeline.py set <id> applied`
 and report `Upwork calls: 0`, then stop before any other step. It records the member's submission. The check on a dashboard row makes the same move without this command.
 
-**The fast lane: a posting the member saw minutes ago.** When the argument is an Upwork job link, an id that is not in the pipeline yet, or the word `fast`, speed comes before the page, because a proposal in the first few minutes is answered far more often than one sent later. Say the posting's age, then, in this order and inside five minutes of the member's message:
+**The fast lane: a posting the member saw minutes ago.** When the argument is an Upwork job link, an id that is not in the pipeline yet, or the word `fast`, speed comes first, because a proposal in the first few minutes is answered far more often than one sent later. Say the posting's age, then, in this order and inside five minutes of the member's message:
 
 1. Take the job id from the link, fetch the posting once with `find_jobs` action `get`, add it with `python3 code/pipeline.py add --file -` (`found_via` set to `notification`) and store it with `python3 code/jobs.py detail <id> <file>`.
 2. One line of judgement: the score out of 10 with its three checks (main offer, their tools, a sample like it), any line of the member's own filter it breaks, any trap, and any mandatory opening phrase or screening question. A broken filter line is said, never enforced: they saw the job and chose it.
-3. Write the application now, as Step 8 sets out, with two differences: no pitch page link and no `[LOOM LINK]` placeholder, because a Loom is recorded for one job and there is no time for one. **If the member has a standard video** (a public YouTube or Loom link under `**Standard proposal video:**` in `context/me.md`, or failing that their `**Intro video:**`), the letter carries it in the Loom's place, as one sentence inviting the client to watch. With no video on record, that sentence offers the next thing instead ("I can send a one-page plan for this today"), which this run then delivers. Run the gate with `--fast`.
-4. Hand over the letter, the screening answers, the bid, what it costs in Connects and the three form fields of Step 9. The member submits on Upwork and types `/proposal <id> submitted`.
-5. Then build the page as usual (Steps 2 to 7), so the plan the letter promised is ready when the client replies; `/dashboard` drafts the message that sends it.
+3. Write the application now, as Step 3 sets out, with one difference: no `[LOOM LINK]` placeholder, because a Loom is recorded for one job and there is no time for one. **If the member has a standard video** (a public YouTube or Loom link under `**Standard proposal video:**` in `context/me.md`, or failing that their `**Intro video:**`), the letter carries it in the Loom's place, as one sentence inviting the client to watch. With no video on record, the letter goes without that sentence. Run the gate with `--fast`.
+4. Hand over the letter, the screening answers, the bid, what it costs in Connects and the three form fields of Step 4. The member submits on Upwork and types `/proposal <id> submitted`.
 
-**Several ids run one after another.** Each page gets its own sketch, its own approval and its own publish: the repetition is the command's, never the member's yes.
+**Several ids run one after another.** Each application gets its own bid and its own approval: the repetition is the command's, never the member's yes.
 
-Follow `references/copy.md` for the page and application. The
+Follow `references/copy.md` for the application. The
 member described in `context/me.md` is the sender.
 
-One page that makes a client stop scrolling: a headline about their job, three
-proofs, their system drawn as a diagram they can drag and edit, the short
-working-together sequence and the next step on Upwork. The Loom that walks
-through this page comes after it. The application includes a cover letter, bid and any screening answers stated in the full posting.
+The application includes a cover letter, bid and any screening answers stated in the full posting, plus the script for the Loom recorded for this job.
 
-Read first: [references/upwork.md](../../references/upwork.md) (hard constraint 8, no contact route on a page before a contract), `context/me.md`.
-
-Before Step 1, if `jobs/<id>/pitch.html` exists, run
-`python3 code/pitch_check.py page jobs/<id>/pitch.html`. When it passes, keep
-that page and skip building it again. Check the pipeline record for a
-`pitch_url`: with one, go straight to the Application step. Without one the page
-was never published, so run Step 7 first, because the application links to a page
-a client has to be able to open.
+Read first: [references/upwork.md](../../references/upwork.md) (hard constraint 8, no contact route before a contract), `context/me.md`.
 
 ## Step 1 · The job and its full posting
 
-`python3 code/pipeline.py get $ARGUMENTS`. The posting is in `details.description`. No posting there (older than a day, or never opened): `find_jobs` action `get` for this one job, then `python3 code/jobs.py detail <id> <file>` as `/find-jobs` Step 6 does. Never build from the summary: the diagram is drawn from the requirements, and the summary does not carry them.
+`python3 code/pipeline.py get $ARGUMENTS`. The posting is in `details.description`. No posting there (older than a day, or never opened): `find_jobs` action `get` for this one job, then `python3 code/jobs.py detail <id> <file>` as `/find-jobs` Step 6 does. Never write from the summary: the letter answers the requirements, and the summary does not carry them.
 
-## Step 2 · Which page is this
-
-- **Anonymous client:** the page pitches the build.
-- **The company is named in the posting:** the page opens with what you noticed about their situation, from their own words and public site. Research is fine, contact is not. Every observation must be checkable; a wrong one about their own business ends the conversation. Uncertain which company: treat it as anonymous.
-
-## Step 3 · Understand the mechanism
+## Step 2 · Understand the mechanism
 
 For every tool or delivery discipline the posting names, check
 `context/tool-knowledge/<tool>.md` if the member has a copy, otherwise the current
@@ -80,136 +64,11 @@ python3 code/pricing.py <id> --hours <low> <likely> <high> \
   --assumption "one concrete scope boundary"
 ```
 
-Every lane runs this before Step 4. It uses the member's rate plus a scope-risk
+Every lane runs this before the application. It uses the member's rate plus a scope-risk
 buffer of 5, 15 or 25 percent for high, medium or low confidence. The internal
-guide is never the bid, never appears on the page and never overrides approved terms.
+guide is never the bid, never appears in the letter and never overrides approved terms.
 
-## Step 4 · Read the posting into a plan
-
-**Decide which page this job gets.** SEO and Google Ads get the one-page roadmap only: phases instead of a drawing, no second page. Every other job gets the full pitch page built below.
-
-- **The posting is mainly SEO, local SEO, Google Business Profile or Google Ads:**
-  copy `templates/roadmap/seo.html` or `templates/roadmap/google-ads.html` to
-  `jobs/<id>/pitch.html`, which is the file the deploy publishes, and edit it to
-  this client. **Then skip Steps 4 and 5 entirely and go to Step 6**: there is no
-  graph and no `pitch_generate.py` run at all. The file's own comment
-  lists what to rewrite; four of them decide whether it lands:
-
-  - **The h1 is the outcome this client asked for, in their words**, never the name of a service.
-  - **Tag the rows they named.** A fifth entry on any `ROWS` row is what they asked for, quoted from the posting; it prints as a tag on that row. Tag only what they actually wrote, and delete the placeholder tag the template ships with.
-  - **Add a row for anything they asked for that the plan does not carry.**
-
-  - **Fill every blank, including the photo and the public profile URL from `context/me.md`.** The photo goes in with
-    `python3 code/photo.py <their photo> --into jobs/<id>/pitch.html`, which crops and sizes
-    it and refuses one too heavy to embed. `pitch_check.py`
-    refuses the page while it still says `<Your name>` or `PUT-YOUR-...`, and the
-    photo has to be embedded as a `data:` URI because the deploy uploads one file
-    and nothing beside it. Remove the walkthrough link until the Loom is recorded;
-    restore it with the actual URL before the ready check and republish.
-
-Keep the three groups and the four tracks; use phases without a delivery timeline. Change the row wording to their trade and city, and the note at the foot if the scope is narrower.
-- **Anything else, or a job that mixes SEO with real automation work:** draw the diagram as below.
-
-Write down, before drawing: the trigger, the systems they already run, the manual work today, where results must land, the phase two wishes, the constraints. Then five rules: use their words ("your Squarespace form", not "web form"); never invent a fact, draw a "which CRM? to confirm" node instead; mark scope with groups (what ships first, what comes later); every manual step in the posting is a step the diagram takes over; a requirement with its own sentence gets its own node.
-
-Write the graph to `jobs/<id>/pitch-graph.json`:
-
-- **The diagram has to earn its place.** A picture that says what a numbered list
-  says is decoration, so it must show at least one of these three, and say which
-  in the run: a **decision** with two outgoing edges that are both labelled, a
-  **node the client already runs** (`owner: client`), or an **open question** the
-  member still needs answered, drawn as its own node.
-- Eight to twenty nodes, and **at least two steps per phase**; the generator refuses one node per phase.
-- **Five roles every graph answers:** what starts it, what the system decides, the normal path, what happens when it fails or nobody answers, and what the client sees at the end.
-- Combine technical internals that serve one outcome and explain them in the node
-  note. Branches read better than one long chain.
-- `nodes`: `id`, `label` (an everyday verb and outcome, ideally four words or fewer), `kind` (`source`, `step`, `sink`, `decision`, `datastore`, `service`, `actor`, `note`, `milestone`), `owner` (`you` builds it, `client` already runs it, `thirdparty` outside service), optional `logo` (a file name in `templates/pitch/logos/`) and `note` (what happens in this exact job). The note is one short sentence that names the exact tool and action, such as "GoHighLevel Workflows sends the missed-call SMS." Never add a separate benefit field or a generic explanation that would survive a different job title. A reader must understand the label without opening it.
-- `edges`: `from`, `to`, optional `label`, optional `dashed` for later phases. **Every edge leaving a decision carries a label** ("yes" and "no", "answered" and "no answer after 24h"), because an unlabelled fork tells a client nothing.
-- `groups`: `label` and `nodes`, one per sequential phase. Use two to five
-  client-facing outcome labels, not technical buckets such as "Setup" or
-  "Automation". The first phase must be the smallest useful result. The board
-  turns each group's last connected step into its visible phase output.
-- **SEO website jobs:** use the four tracks in `seo.md`, with the Step 3 fallback, as
-  the **phases**, not as the nodes. Each track carries its own two or three steps,
-  and the branch that matters is usually what happens to the old URLs and what the
-  client has to supply. A plugin, badge, schema type or speed target belongs in a
-  node note unless it changes the order or creates a real branch.
-
-## Step 5 · Show the flow, then assemble
-
-Images are optional. Before any paid generation, including kie.ai through
-`proposal_illustrate.py`, state the current model cost per image, count and total,
-then wait for an explicit yes. Unknown cost: continue without images.
-
-**Run `python3 code/graph_sketch.py jobs/<id>/pitch-graph.json` and put the sketch in front of the member before anything is generated.** It prints the diagram as text: one block per phase, node owners, every labelled edge, and the three proofs counted rather than claimed.
-
-Research and draft the flow alone. Then read the sketch back in two lines, say which of the three proofs it rests on and what you deliberately left out, and wait for the member's yes or correction **before** the page is rendered and published.
-
-**Every FIX line the sketch prints is a defect, not a hint.**
-
-```
-python3 code/pitch_generate.py <id> --hook "..." \
-  --build-lede "one job-specific sentence explaining the full flow" \
-  --graph jobs/<id>/pitch-graph.json --kickoff "..." (repeat) \
-  --updates "cadence|platform" \
-  --plan-outcome "job-specific client benefit" (once per card) \
-  --plan-image jobs/<id>/plan-01.jpg (once per card) \
-  --hero-illustration jobs/<id>/hero.jpg
-```
-
-- **Industry treatment:** choose one restrained `--theme` and keep it for the whole page: `steel` for trades, construction and operations; `signal` for software, AI and automation; `growth` for SEO, marketing and commerce; `calm` for health, coaching, education and care; or `warm` for general professional services. Hero and card illustrations (one per card, two cards) use the client's actual environment, materials and workflow. Motion stays subtle, readable and disabled by reduced-motion preferences.
-
-- **Proof stays short:** at most three client voices on the page.
-
-- **The flow board answers to a keyboard:** every node reachable and openable with the keyboard alone, and automatic scaling never shrinks a node below 88 percent of its readable size.
-
-- **Copy hierarchy:** lead every section and card with the result the client wants, such as fewer lost leads, and put tools and mechanics in the description below. Never use a tool name or a feature list as the headline. Both layers stay specific to this job and supported by the posting or proof.
-
-- **Onboarding:** only the access, content and decisions needed before the first build.
-- **Updates:** name a specific cadence and where updates will live. Upwork before a
-  contract, the client's own workspace after hire.
-- **Working together:** lead with the client outcome, then how it happens. Write one short, job-specific `--plan-outcome` per card and optionally one landscape `--plan-image` per card, in the same order. When images are chosen, hero and card images form one coherent series: one style, the actual project in the client's industry, no text, logos or generic diagrams. The subject is the system, work or finished outcome; people only as small context, never looking at a screen, pointing at a board or posing beside the work. Inspect every source image and its crop on the finished page; reject repeated compositions, fake readable UI, dominant people and crops that hide the industry or the work.
-- **Member photo:** when a real member photo is available, use it as the identity
-  reference for one natural action portrait and pass the finished local asset
-  with `--profile-image`. Never invent a member's likeness without that
-  reference. The proof beside it still comes only from the Results, Reviews and Credentials sections of
-  `context/me.md`.
-- Do not put a budget or speculative delivery timeline on the pitch page. The
-  internal pricing guide remains in the cockpit for the member.
-- **Next step** (`--next-step`) points back to Upwork; the default asks them to send their website or current setup there.
-- **Build lede:** one sentence that names this job's trigger, useful outcome
-  and final handoff. It sits above the board. Generic claims such as "drawn
-  from your posting" are not accepted.
-- Optional: `--live-artifact "Label|URL"` for anything actually built and `--proof-link "Label|Detail|URL"` for past work with no contact details on it.
-- **Pictures are optional and the pitch is complete without them.** A 16:9 `--hero-illustration` sits directly below the headline, never inside the flow, and follows the image rules above. A path you pass that does not exist is still an error; passing none is not.
-- Give the moving dither field a job-specific, high-contrast source through `--dither-source`: one simple industry object or scene (a roofline and ladder for roofing) that stays identifiable as dots, not a particle cloud or detailed photo. Prefer a small local SVG; it is embedded and may load nothing from the network. Keep every motif upright: horizontal mirroring is fine, vertical flipping is not.
-
-## Step 6 · The gates
-
-- `python3 code/pitch_check.py page jobs/<id>/pitch.html`: no email, phone, booking link, messenger or social profile anywhere on the page, no unfilled placeholder. Upwork suspends accounts for contact details before a contract, and a linked page counts.
-- Run `python3 code/pitch_capture.py <id>`, read the screenshot path it prints,
-  then run `python3 code/pitch_capture.py <id> --clean`. Never call a page done
-  unseen. The cleanup removes the temporary screenshot after the visual check.
-- Inspect the hero and every plan-image crop. Check every dither placement:
-  the source must be upright, identifiable and clear of the copy.
-
-## Step 7 · Publish the client page
-
-**Run `python3 code/preflight.py vercel`, then ask.** Unavailable: say so, skip this step
-and go to the application, which then carries no link and one sentence about the plan
-instead. Available: one line to the member, what the page promises and that the URL is
-about to be public, and publish on their pick: a single choice, publish it or not yet
-([references/copy.md: How to ask](../../references/copy.md#how-to-ask)).
-
-Run `python3 code/pitch_deploy.py <id>`. It confirms the page opens publicly and
-saves the exact deployment URL through `code/pipeline.py`. Never upload the job
-folder, because it contains drafts.
-
-**It republishes every page that project already holds** (one Vercel deploy replaces the whole project): an old page failing its gate stops this run with `the previously published pitch <id> failed its gate`, and the fix is that page. A page the member pulled stays gone after the next deploy.
-
-Publishing is part of this command. A missing Vercel CLI or authentication is a blocker, not a completed pitch. A Vercel CLI login or a `VERCEL_TOKEN` works, **but not a token that belongs to a different account**: the preflight stops when a token publishes as somebody other than `vercel login`. A team token names the team in `VERCEL_SCOPE`.
-
-## Step 8 · Application
+## Step 3 · Application
 
 Use the full posting from Step 1 and `references/copy.md` for
 every line the client will read. The member reviews and submits the proposal
@@ -307,11 +166,11 @@ The five beats, in this order:
 
 1. **Their problem, in their words**, inside the first ten seconds, taken from the posting. Open on them, then "let me show you what I would do".
 2. **One proof, on screen**: the result closest to their job, with its number.
-3. **What I would do, in three steps**, shown on the plan and the diagram of their pitch page. Three steps and never the whole method: for a Google Ads job that is the account check, then the fix (tracking, campaigns and the landing page), then the budget moved to what books. Each step ends on what the client gets from it.
+3. **What I would do, in three steps**, shown on screen. Three steps and never the whole method: for a Google Ads job that is the account check, then the fix (tracking, campaigns and the landing page), then the budget moved to what books. Each step ends on what the client gets from it.
 4. **The promise**: the member's risk reversal, word for word as recorded in `context/me.md`.
 5. **The next step**: reply here, or a short call to walk through it.
 
-**Show the work, not the face.** The screen carries the video: their own website or posting, the pitch page, a real account or dashboard with nothing private on it. A finished thing on screen is believed where a talking head is skipped. No contact details on screen or in the words, and nothing about their business that cannot be checked.
+**Show the work, not the face.** The screen carries the video: their own website or posting, a real account or dashboard with nothing private on it. A finished thing on screen is believed where a talking head is skipped. No contact details on screen or in the words, and nothing about their business that cannot be checked.
 
 **`/proposal video` writes the standard version instead:** the same five beats for a member's whole market rather than one client, with the problem named for the business model they serve ("you pay for clicks and cannot tell which ad books the job") and the three steps shown on a real, anonymous example. It is recorded once, its public link goes under `**Standard proposal video:**` in `context/me.md`, and the fast lane links to it when there is no time to record a Loom for that job. Save the script to `context/standard-video.md`.
 
@@ -354,13 +213,11 @@ moment it is pasted. Nothing is pasted, and nothing could ever be submitted, unt
 Never mark Applied until the member submits on Upwork, then runs `/proposal <id> submitted`.
 That stage rests on their word; `/dashboard` checks once if no proposal ever shows up.
 
-## Step 9 · Report
+## Step 4 · Report
 
-Run `python3 code/pipeline.py prune` first, because Step 1 fetched the full job. Then the completion report as CLAUDE.md defines it, with the public page and
+Run `python3 code/pipeline.py prune` first, because Step 1 fetched the full job. Then the completion report as CLAUDE.md defines it, with the
 application linked. Say what the application costs in Connects and what the balance leaves. Then the three fields on Upwork's form, one line each (13 October 2026; reasoned, no data exists either way): leave the scheduled rate increase on Never, since a raise is easier to ask for once they want to keep you; add up to four profile highlights, the sample project closest to this job first; and boost only a job they would be thrilled to win, since serious clients read every proposal.
-Next: record the Loom from the video script and return its URL here; add it to the page and replace [LOOM LINK] in the letter.
-Then run `python3 code/pitch_check.py page jobs/<id>/pitch.html --ready` and the ready
-application check again. Republish with `python3 code/pitch_deploy.py <id>` under the
-member's publish approval, confirm the live URL and say it was republished with the Loom.
+Next: record the Loom from the video script and return its URL here; replace [LOOM LINK] in the letter.
+Then run the ready application check again.
 Only then submit on Upwork and run `/proposal <id> submitted`.
 End with `Upwork calls: N`.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail before paid work when credentials or publishing are unavailable.
+"""Fail before paid work when credentials are unavailable.
 
 Every check reads its credentials first and returns without them, never calling the
 provider: a check made with an empty key produces a request that proves nothing and
@@ -12,8 +12,6 @@ import argparse
 import json
 import os
 import pathlib
-import shutil
-import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -21,7 +19,7 @@ import urllib.request
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'code'))
 
-import pitch_deploy
+from env_file import load_dotenv
 
 
 def get_json(url, headers, *, opener=urllib.request.urlopen):
@@ -63,55 +61,7 @@ def kie_error(env, *, fetch=get_json):
     return ''
 
 
-def last_line(text):
-    """The account name, past the CLI's own banner line."""
-    lines = [line.strip() for line in str(text or '').splitlines() if line.strip()]
-    return lines[-1] if lines else ''
-
-
-def vercel_error(env, *, which=shutil.which, runner=subprocess.run, ensure_project=True):
-    vercel = which('vercel')
-    if not vercel:
-        return 'Install the Vercel CLI before starting.'
-    try:
-        config = pitch_deploy.deployment_config(env)
-    except SystemExit:
-        return 'Fix the Vercel project settings in .env.'
-    options = pitch_deploy.auth_args(config)
-    who = runner([vercel, 'whoami', *options], env=config['env'], capture_output=True, text=True)
-    if who.returncode or not who.stdout.strip():
-        return 'Vercel authentication failed. Log in or add a valid VERCEL_TOKEN.'
-    # A token always beats the account behind `vercel login`, and nothing says so
-    # while it works: a stale one publishes a client's page into a stranger's
-    # Vercel and reports success. A token for a team is legitimate, and that case
-    # names its team in VERCEL_SCOPE, so only the silent mismatch stops the run.
-    if str(config['env'].get('VERCEL_TOKEN') or '').strip() and not str(
-            config['env'].get('VERCEL_SCOPE') or '').strip():
-        login = runner([vercel, 'whoami'], capture_output=True, text=True)
-        named = last_line(who.stdout)
-        signed_in = last_line(login.stdout) if not login.returncode else ''
-        if signed_in and named and signed_in != named:
-            return (f'your VERCEL_TOKEN publishes as {named}, but vercel login is {signed_in}. '
-                    f'The token wins, so a client page would land in that account. Remove '
-                    f'VERCEL_TOKEN to use your login, or set VERCEL_SCOPE if {named} is meant.')
-    inspect = runner([vercel, 'project', 'inspect', config['project'], *options],
-                     env=config['env'], capture_output=True, text=True)
-    if not inspect.returncode:
-        return ''
-    if not ensure_project:
-        return f'Vercel project {config["project"]} is not available.'
-    added = runner([vercel, 'project', 'add', config['project'], *options],
-                   env=config['env'], capture_output=True, text=True)
-    if added.returncode:
-        return f'Vercel project {config["project"]} could not be created or opened.'
-    checked = runner([vercel, 'project', 'inspect', config['project'], *options],
-                     env=config['env'], capture_output=True, text=True)
-    return '' if not checked.returncode else f'Vercel project {config["project"]} is still unavailable.'
-
-
-def checks(profile, env, *, fetch=get_json, which=shutil.which, runner=subprocess.run):
-    if profile == 'vercel':
-        return [('Vercel', vercel_error(env, which=which, runner=runner))]
+def checks(profile, env, *, fetch=get_json):
     if profile == 'proposal':
         return [('kie.ai', kie_error(env, fetch=fetch))]
     raise ValueError(f'unknown preflight profile: {profile}')
@@ -119,11 +69,11 @@ def checks(profile, env, *, fetch=get_json, which=shutil.which, runner=subproces
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('profile', choices=('vercel', 'proposal'))
+    parser.add_argument('profile', choices=('proposal',))
     args = parser.parse_args(argv)
     env = dict(os.environ)
-    pitch_deploy.load_dotenv(ROOT / '.env', env)
-    pitch_deploy.load_dotenv(pathlib.Path.home() / '.config' / 'credentials.env', env)
+    load_dotenv(ROOT / '.env', env)
+    load_dotenv(pathlib.Path.home() / '.config' / 'credentials.env', env)
     results = checks(args.profile, env)
     for name, problem in results:
         print(f'{"FAIL" if problem else "PASS"}  {name}{f": {problem}" if problem else ""}')

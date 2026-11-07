@@ -187,7 +187,7 @@ terms of service, or any similar contract" [Read: ToU 3.1]. Skip such a posting 
 ## 9. Other people's data
 
 You can't "post personal identifying information or other sensitive, private data about
-another person" [Read: ToU 3.3]. A pitch page is public: it carries no client personal data
+another person" [Read: ToU 3.3]. A public page carries no client personal data
 and no copied posting text [Reasoned, from ToU 3.5]. A call is recorded or transcribed only
 with the client's knowledge; Upwork's own meetings show a notice first [Summary:
 46026132679571].
@@ -208,7 +208,7 @@ for a way round, and never promote a [Reasoned] hint or an open question to perm
   page with comments open may itself be a platform "that includes a communications tool"
   [Reasoned, from UA 7.2]. Hint: comments off, no contact detail in the video, its title or
   its description.
-- **A surname or business name on a pitch page** could let a client find the member elsewhere,
+- **A surname or business name on a public page** could let a client find the member elsewhere,
   "identifying you through social media" [Reasoned, from UA 7.2]. Hint: name the member as
   their Upwork profile does.
 - **Subcontracting.** One summary said it is barred on hourly contracts and must be explicit

@@ -26,7 +26,7 @@ import subprocess
 import sys
 import time
 from pipeline import jobs_dir, shown
-from pitch_deploy import load_dotenv
+from env_file import load_dotenv
 import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]

@@ -7,8 +7,8 @@
 ## The outcome
 
 A freelancer opens one place and knows what matters and what to do next. The
-system carries the work from profile positioning through job discovery, pitch
-page and application, conversation and follow-up, to a won contract handed over.
+system carries the work from profile positioning through job discovery and
+application, conversation and follow-up, to a won contract handed over.
 
 The goal is not more automated activity. The goal is more good-fit applications,
 more useful client conversations and more won work. Speed matters only when the

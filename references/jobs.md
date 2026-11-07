@@ -176,7 +176,7 @@ still get dropped.
 **Lane A, getting found and getting enquiries.** SEO, Google Ads and the website that carries
 them. Three buyers by business model: a service business that wants the phone to ring, a store
 that wants sales, a software company that wants trials. It is the lane this repo already
-delivers for: both roadmap templates are SEO and Google Ads.
+delivers for: the shipped tool references cover SEO and Google Ads.
 
 ```
 - Local SEO: Google Business Profile · Google Maps ranking · local SEO

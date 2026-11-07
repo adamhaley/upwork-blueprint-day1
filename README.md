@@ -7,14 +7,13 @@ The full product goal and review standard are in [VISION.md](VISION.md).
 ## Quick start
 
 Before you clone: `/about-me` runs on a Claude plan alone. Every Upwork command
-needs the free Upwork connector. Publishing a pitch page needs a free
-Vercel account. Details are in
+needs the free Upwork connector. Details are in
 [Requirements](#requirements) and [What it costs to run](#what-it-costs-to-run).
 
 1. Clone it anywhere on your computer:
    `git clone https://github.com/automatable-skool/upwork-blueprint-day1.git`
 2. Open a terminal in the folder and run `./setup.sh` once. It creates your own
-   files and writes `.env` with your unique Vercel project
+   files and `.env`
 3. Follow [Connect Upwork](#connect-upwork), then run `/about-me`. It asks about
    your background once; later commands write from those answers
 
@@ -40,7 +39,7 @@ Claude Code session. `RESEARCH.md` is background reading; no command uses it.
 | 1 | `/about-me` | Your work history, your offer, your terms and every result you can prove |
 | 2 | `/profile` | Measures your live profile, then writes the version that fixes it |
 | 3 | `/find-jobs` | Ten leads a day worth applying to, scored against what you sell, straight into your dashboard |
-| 4 | `/proposal` | A one-page pitch site plus the cover letter and bid you submit with your Loom |
+| 4 | `/proposal` | The cover letter, the bid and the video script, ready to submit with your Loom |
 | 5 | `/dashboard` | Unlocks day 7. Your day: pulls what changed on Upwork, opens your dashboard with every lead and its next step, and drafts the messages that are due. Type it again to refresh |
 | 6 | `/sales-call-prep` | Unlocks day 7. Before a sales call: one page to glance at during it, the seven stops in order with what to say at each, and a few facts about the business and the person |
 | 7 | `/sales-call-proposal` | Unlocks day 7. Turns your sales call into the proposal you send, and says whether it is ready to start a project on |
@@ -71,18 +70,15 @@ from.
   make a virtual environment first: `python3 -m venv .venv && source .venv/bin/activate`
   Activate it with `source .venv/bin/activate` in every new terminal before `claude`.
 - [Node.js](https://nodejs.org) 20.19+ (20.x) or 22.12+ for the cockpit
-- Google Chrome, which `/proposal` uses to check the page on a phone screen
+- Google Chrome, which `/sales-call-proposal` uses to print the proposal as a PDF
 - Optional: Claude's Google Drive and Gmail connectors. `/about-me` then looks there,
   and in your Documents, Downloads and Desktop, for old CVs, results and client
   messages on its own. Read only; Claude Code still asks before it opens a file
   outside this folder, and saying no just skips that source.
-- Vercel CLI: `npm i -g vercel`, then `vercel login` (or set `VERCEL_TOKEN`).
-  If that install fails with EACCES, use `npm i -g --prefix "$HOME/.local" vercel`
-  and add `export PATH="$HOME/.local/bin:$PATH"` to your shell startup file.
 
 `./setup.sh` and `python3 code/tools_status.py` list what each command still needs.
-Upwork commands need the connector; publishing needs Vercel. /about-me can start
-before either is ready.
+Upwork commands need the connector. /about-me can start
+before it is ready.
 
 ## What it costs to run
 
@@ -90,7 +86,6 @@ before either is ready.
 |------|------|
 | Claude Code | a paid Claude plan that includes Claude Code, or API billing |
 | Upwork applications | About 70 Connects/day for ten applications; the actual job costs vary and /find-jobs counts them |
-| Public pitch pages | Vercel's free plan, within its limits |
 | Optional image API | Usage billed separately; paid images require your yes after the cost is shown |
 
 The keys and bills are yours. `KIE_AI_API_KEY` generates images; you can instead
@@ -113,7 +108,7 @@ Everything below is yours and gitignored, so `git pull` never touches it.
 - `profile.html` - the same draft on the resume's sheet: what a client sees first, whether a client would choose it over the next nine, what is still to decide, and every field ready to copy with one click
 - `data/jobs.json` - your pipeline, written only by `code/pipeline.py`
 - `data/upwork-calls.jsonl` - the count behind the call cap: a time and a tool name per call, nothing from Upwork
-- `jobs/<id>/` - one folder per job: the pitch page, the application,
+- `jobs/<id>/` - one folder per job: the application,
   the call brief, the proposal, the threads and the drafts
 
 Client folders default to `<repo parent>/clients/<slug>/`, a sibling outside this
@@ -134,7 +129,7 @@ inside this repository, marked legacy.
 ## What this will never do
 
 It never submits a proposal, never buys Connects, and never runs on its own in
-the background. It prepares the pitch page and the application; you record the
+the background. It prepares the application; you record the
 Loom, paste its link and submit on Upwork yourself, because an application spends
 Connects and is a bid.
 
@@ -165,10 +160,5 @@ Upwork yet. The reasoning and the source are in
 Stuck? Open an issue on the repository, or ask in the community you got this
 from. Include what you ran and what it printed; both are usually enough.
 
-Three things in here are not ours. The tool logos in `templates/pitch/logos/`
-come from Simple Icons under CC0; brand marks stay their owners' property and
-only name a tool a client already runs. The diagram look in
-`templates/pitch/diagram.js` follows the design system of diagram-design by
-Cathryn Lavery, MIT licence, with no code copied from it. Everything else,
-including the ink drawing behind the pitch page headline, is the author's: it ships to members to use in their
+Everything in here is the author's: it ships to members to use in their
 own freelancing, not to republish or resell.

@@ -17,18 +17,17 @@ import json
 import os
 import pathlib
 import shutil
-import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'code'))
-import pitch_deploy  # noqa: E402
+from env_file import load_dotenv  # noqa: E402
 
 
 def env_with_files():
     env = dict(os.environ)
-    pitch_deploy.load_dotenv(ROOT / '.env', env)
-    pitch_deploy.load_dotenv(pathlib.Path.home() / '.config' / 'credentials.env', env)
+    load_dotenv(ROOT / '.env', env)
+    load_dotenv(pathlib.Path.home() / '.config' / 'credentials.env', env)
     return env
 
 
@@ -54,13 +53,6 @@ def chrome(env):
     return pathlib.Path('/Applications/Google Chrome.app').is_dir()
 
 
-def vercel_signed_in():
-    if not shutil.which('vercel'):
-        return False
-    done = subprocess.run(['vercel', 'whoami'], capture_output=True, text=True)
-    return not done.returncode and bool(done.stdout.strip())
-
-
 def rows(env):
     """Every tool, in the order a member meets it."""
     return [
@@ -71,17 +63,12 @@ def rows(env):
          'runs the cockpit',
          '/find-jobs, /dashboard', 'install from nodejs.org, or work from the chat'),
         ('Python packages', python_packages(), 'optional',
-         'sizes your photo and the proposal sketch so each page stays one file',
-         '/proposal, /sales-call-proposal',
+         'sizes the proposal sketch so the page stays one file',
+         '/sales-call-proposal',
          'pip install -r requirements.txt. Without it the pages are built without those images'),
         ('Google Chrome', chrome(env), 'optional',
          'screenshots a page before you send it',
-         '/proposal, /sales-call-proposal', 'without it you check the page by eye'),
-        ('Vercel', vercel_signed_in() or has_key(env, 'VERCEL_TOKEN'), 'required',
-         'puts your pitch page on a link a client can open',
-         '/proposal',
-         "npm i -g vercel, then vercel login. Without it you still get the cover letter "
-         "and the bid, with no page to link"),
+         '/sales-call-proposal', 'without it you check the page by eye'),
         ('kie.ai', has_key(env, 'KIE_AI_API_KEY'), 'optional',
          'draws the sketch on the proposal page',
          '/sales-call-proposal', 'without it the command prints the prompt for any image model you have'),

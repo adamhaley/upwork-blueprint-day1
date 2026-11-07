@@ -10,8 +10,8 @@ evidence sections of context/me.md cannot back, and no way of reaching the membe
 off Upwork. It never sends or changes a reply.
 
 A draft is the one client-facing artifact that leaves this repo as a message, and
-it used to be the only one with no gate on its content: the cover letter and the
-pitch page were both scanned for unproven numbers and contact details while the
+it used to be the only one with no gate on its content: the cover letter was
+scanned for unproven numbers and contact details while the
 reply, which goes straight into a client's inbox, was checked for shape alone.
 """
 import argparse

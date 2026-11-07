@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""The gate for what goes to a client before a contract: the pitch page.
+"""The gate for what goes to a client before a contract: the proposal page.
 
-    python3 code/pitch_check.py page jobs/<id>/pitch.html [--ready]
+    python3 code/pitch_check.py page jobs/<id>/proposal.html [--ready]
 
 The page check exists because Upwork bans contact details before a contract,
 and a linked page counts: an email, a phone number, a booking link, a WhatsApp

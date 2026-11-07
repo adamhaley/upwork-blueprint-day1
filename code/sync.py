@@ -828,12 +828,6 @@ def cmd_apply(args):
         print(f'added   {jid}  ({"imported Upwork history" if first_import else "observed Upwork lead"})')
     for jid in waiting:
         print(f'waiting {jid}  (the client is waiting for your reply)')
-    clicks = subprocess.run([sys.executable, str(pathlib.Path(__file__).with_name('clicks.py'))],
-                            text=True, capture_output=True, check=False)
-    if clicks.returncode:
-        print('Click sync failed; pipeline sync completed. Retry code/clicks.py when Blob is available.')
-    elif clicks.stdout.strip():
-        print(clicks.stdout.strip())
     print(f'\n{len(moved)} moved, {len(added)} added, {sum(map(len, threads.values()))} threads saved, '
           f'{len(waiting)} waiting on you.')
     return 1 if _mutation_failures else 0

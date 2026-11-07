@@ -12,7 +12,7 @@ const TYPES: Record<string, string> = {
   '.png': 'image/png', '.json': 'application/json; charset=utf-8',
 };
 
-// A job's own files (pitch page, application, one-pager). Links and previews open
+// A job's own files (application, one-pager). Links and previews open
 // them directly, so there is no token here, only the local host check and a path
 // that cannot leave the job's folder.
 export async function GET(req: Request, { params }: { params: Promise<{ id: string; name: string }> }) {

@@ -51,7 +51,7 @@ def ledger_path():
 
 def setting(name):
     """One value from the environment, else from .env. Read here and not through
-    pitch_deploy: this runs before every Upwork call and must not fail with a module
+    another module: this runs before every Upwork call and must not fail with a module
     it has no use for."""
     raw = os.environ.get(name)
     if raw is None:

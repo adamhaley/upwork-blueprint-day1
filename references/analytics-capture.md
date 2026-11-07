@@ -199,11 +199,7 @@ prints: `proposal` in /proposal, `messages` for a reply or follow-up in /dashboa
    `python3 code/jobs.py detail <id> <file>`. Prepare Uma's requested
    answers/video instead of a cover letter. Ask for missing mandatory proof
    and bid terms before drafting; the member submits on Upwork.
-2. A walkthrough video/page is optional, chosen for requirements, value and preparation cost.
-   Without them, go straight to Application. For a chosen existing page run
-   `python3 code/pitch_check.py page jobs/<id>/pitch.html`; reuse a passing page,
-   and publish through the caller's approval gate if no public URL exists.
-   Each job needs its own sketch/publish approval.
+2. A walkthrough video is optional, chosen for requirements, value and preparation cost.
 3. Claude writes the application from the full post and verified proof, using
    `references/copy.md` and the coach brief. Use [LOOM LINK] only for an agreed
    walkthrough. Run
@@ -211,10 +207,7 @@ prints: `proposal` in /proposal, `messages` for a reply or follow-up in /dashboa
    adding `--video-required` only when explicitly required. Fix errors and read
    against the post. Before manual handoff run
    `python3 code/application_check.py jobs/<id>/application.md --ready --modality <text|uma>`.
-4. Check any chosen page
-   with `python3 code/pitch_check.py page jobs/<id>/pitch.html --ready`, repeat
-   the ready application gate and republish with
-   `python3 code/pitch_deploy.py <id>` under the member's publish approval.
+4. Once the Loom URL replaces [LOOM LINK], repeat the ready application gate.
 5. For `submitted`, ask for actual submitted copy, answers and bid,
    or explicit confirmation each matches its approved source. Run `python3 code/pipeline.py sent <id> --file <submitted-copy> --answers-file <submitted-answers.json> --bid <actual-amount>`;
    use `--confirmed-match` instead of `--file` for a confirmed draft match,

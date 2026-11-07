@@ -1,8 +1,8 @@
 // What a lead needs next: a command to copy into Claude Code, or a sentence for
 // the member's own hands, plus the other commands that fit its stage. The
 // cockpit runs nothing itself.
-// The stage decides what a lead carries. `new` builds the pitch page until BOTH
-// files exist, then the member submits by hand, and `/find-jobs skip <id>
+// The stage decides what a lead carries. `new` writes the application until
+// it exists, then the member submits by hand, and `/find-jobs skip <id>
 // <reason>` stays available on every new lead. `applied` waits. `replied`, `call` and `offer`
 // answer a waiting client first and a due follow-up second, where due means
 // `next_follow_up <= today`; a future date stays Waiting. `/sales-call-prep` is the task
@@ -97,9 +97,9 @@ function stageStep(job, today) {
   switch (job.status) {
     case 'new': {
       const skip = [`/find-jobs skip ${id} <reason>`];
-      return has(job, 'pitch.html') && has(job, 'application.md')
+      return has(job, 'application.md')
         ? step('Submit', `Submit on Upwork with your standard video, then tick the check here. Optional: record a Loom for this job and give its URL to /proposal ${id} first.`, null, skip)
-        : step('Build pitch page', 'Builds the pitch page and the application.', `/proposal ${id}`, skip);
+        : step('Write application', 'Writes the cover letter, the bid and the video script.', `/proposal ${id}`, skip);
     }
     case 'applied':
       return step('Waiting', WAITING);
